@@ -1,9 +1,8 @@
-def onlineTrancribe(sr, recognizer): 
-    while True:
+def onlineTranscribe(sr, recognizer): 
+    try:
         with sr.Microphone() as source:
             print("Listening...")
             recognizer.adjust_for_ambient_noise(source, duration=0.2)
-        
             try:
                 audio = recognizer.listen(source)
 
@@ -13,9 +12,10 @@ def onlineTrancribe(sr, recognizer):
 
                 if text == "exit":
                     print(f"You said: {text}. Exiting")
-                    break
+                    return text
                 else:
                     print(f"You said: {text}")
+                    return text
 
             except sr.WaitTimeoutError:
                 print("No speech detected within the timeout period.")
@@ -25,3 +25,5 @@ def onlineTrancribe(sr, recognizer):
                 print(f"Could not request results from Google Speech Recognition service; {e}")
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
+    except OSError as e:
+        print(f"Microphone is not available or accessible: {e}")
